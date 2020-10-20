@@ -23,6 +23,7 @@ return [
     */
 
     'dir' => [
-        'seeders',
+        database_path('seeders'),
+        // base_path('Modules/YOURMODULENAME/Database/Seeders'),
     ],
 ];
