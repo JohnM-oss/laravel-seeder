@@ -1,8 +1,8 @@
 <?php
 
-namespace Eighty8\LaravelSeeder\Migration;
+namespace RenePardon\LaravelSeeder\Migration;
 
-use Eighty8\LaravelSeeder\Repository\SeederRepositoryInterface;
+use RenePardon\LaravelSeeder\Repository\SeederRepositoryInterface;
 
 interface SeederMigratorInterface
 {

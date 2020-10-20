@@ -1,9 +1,9 @@
 <?php
 
-namespace Eighty8\LaravelSeeder\Command;
+namespace RenePardon\LaravelSeeder\Command;
 
-use Eighty8\LaravelSeeder\Migration\SeederMigratorInterface;
 use Illuminate\Console\Command;
+use RenePardon\LaravelSeeder\Migration\SeederMigratorInterface;
 
 abstract class AbstractSeedMigratorCommand extends Command
 {
@@ -35,6 +35,51 @@ abstract class AbstractSeedMigratorCommand extends Command
     }
 
     /**
+     * Execute the console command.
+     */
+    abstract public function handle(): void;
+
+    /**
+     * Gets the paths for the migration files to run the migrator against.
+     *
+     * @return array
+     */
+    public function getMigrationPaths(): array
+    {
+        return $this->migrationPaths;
+    }
+
+    /**
+     * Sets the paths for the migration files to run the migrator against.
+     *
+     * @param array $paths
+     */
+    public function setMigrationPaths(array $paths): void
+    {
+        $this->migrationPaths = $paths;
+    }
+
+    /**
+     * Gets the options for the migrator.
+     *
+     * @return array
+     */
+    public function getMigrationOptions(): array
+    {
+        return $this->migrationOptions;
+    }
+
+    /**
+     * Sets the options for the migrator.
+     *
+     * @param array $migrationOptions
+     */
+    public function setMigrationOptions(array $migrationOptions)
+    {
+        $this->migrationOptions = $migrationOptions;
+    }
+
+    /**
      * Prepares the migrator for usage.
      */
     protected function prepareMigrator(): void
@@ -54,7 +99,7 @@ abstract class AbstractSeedMigratorCommand extends Command
 
         $this->getMigrator()->setConnection($database);
 
-        if (!$this->getMigrator()->repositoryExists()) {
+        if (! $this->getMigrator()->repositoryExists()) {
             $this->call('seed:install', ['--database' => $database]);
         }
     }
@@ -116,15 +161,17 @@ abstract class AbstractSeedMigratorCommand extends Command
      */
     protected function resolveMigrationPaths(): void
     {
-        $pathFromConfig = database_path(config('seeders.dir'));
+        $pathsFromConfig = database_path(config('seeders.dir'));
 
-        // Add the 'all' environment path to migration paths
-        $allEnvPath = $pathFromConfig.DIRECTORY_SEPARATOR.self::ALL_ENVIRONMENTS;
-        $this->addMigrationPath($allEnvPath);
+        foreach ($pathsFromConfig as $pathFromConfig) {
+            // Add the 'all' environment path to migration paths
+            $allEnvPath = $pathFromConfig . DIRECTORY_SEPARATOR . self::ALL_ENVIRONMENTS;
+            $this->addMigrationPath($allEnvPath);
 
-        // Add the targeted environment path to migration paths
-        $pathWithEnv = $pathFromConfig.DIRECTORY_SEPARATOR.$this->getEnvironment();
-        $this->addMigrationPath($pathWithEnv);
+            // Add the targeted environment path to migration paths
+            $pathWithEnv = $pathFromConfig . DIRECTORY_SEPARATOR . $this->getEnvironment();
+            $this->addMigrationPath($pathWithEnv);
+        }
     }
 
     /**
@@ -158,50 +205,5 @@ abstract class AbstractSeedMigratorCommand extends Command
     public function addMigrationOption(string $key, string $value): void
     {
         $this->migrationOptions[$key] = $value;
-    }
-
-    /**
-     * Execute the console command.
-     */
-    abstract public function handle(): void;
-
-    /**
-     * Gets the paths for the migration files to run the migrator against.
-     *
-     * @return array
-     */
-    public function getMigrationPaths(): array
-    {
-        return $this->migrationPaths;
-    }
-
-    /**
-     * Sets the paths for the migration files to run the migrator against.
-     *
-     * @param array $paths
-     */
-    public function setMigrationPaths(array $paths): void
-    {
-        $this->migrationPaths = $paths;
-    }
-
-    /**
-     * Gets the options for the migrator.
-     *
-     * @return array
-     */
-    public function getMigrationOptions(): array
-    {
-        return $this->migrationOptions;
-    }
-
-    /**
-     * Sets the options for the migrator.
-     *
-     * @param array $migrationOptions
-     */
-    public function setMigrationOptions(array $migrationOptions)
-    {
-        $this->migrationOptions = $migrationOptions;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Eighty8\LaravelSeeder\Tests;
+namespace RenePardon\LaravelSeeder\Tests;
 
 use PHPUnit\Framework\TestCase;
 

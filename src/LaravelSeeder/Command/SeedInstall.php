@@ -1,10 +1,10 @@
 <?php
 
-namespace Eighty8\LaravelSeeder\Command;
+namespace RenePardon\LaravelSeeder\Command;
 
-use Eighty8\LaravelSeeder\Repository\SeederRepository;
-use Eighty8\LaravelSeeder\Repository\SeederRepositoryInterface;
 use Illuminate\Console\Command;
+use RenePardon\LaravelSeeder\Repository\SeederRepository;
+use RenePardon\LaravelSeeder\Repository\SeederRepositoryInterface;
 use Symfony\Component\Console\Input\InputOption;
 
 class SeedInstall extends Command

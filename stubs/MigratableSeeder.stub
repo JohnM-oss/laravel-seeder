@@ -1,7 +1,7 @@
 <?php
 
-use Eighty8\LaravelSeeder\Migration\MigratableSeeder;
-use Eighty8\LaravelSeeder\Repository\DisableForeignKeysTrait;
+use RenePardon\LaravelSeeder\Migration\MigratableSeeder;
+use RenePardon\LaravelSeeder\Repository\DisableForeignKeysTrait;
 
 class {{class}} extends MigratableSeeder
 {

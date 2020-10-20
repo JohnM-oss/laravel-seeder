@@ -1,13 +1,13 @@
 <?php
 
-namespace Eighty8\LaravelSeeder\Repository;
+namespace RenePardon\LaravelSeeder\Repository;
 
-use DB;
+use Illuminate\Support\Facades\DB;
 
 trait DisableForeignKeysTrait
 {
     private $commands = [
-        'mysql' => [
+        'mysql'  => [
             'enable'  => 'SET FOREIGN_KEY_CHECKS=1;',
             'disable' => 'SET FOREIGN_KEY_CHECKS=0;',
         ],

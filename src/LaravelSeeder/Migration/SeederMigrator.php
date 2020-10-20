@@ -1,12 +1,12 @@
 <?php
 
-namespace Eighty8\LaravelSeeder\Migration;
+namespace RenePardon\LaravelSeeder\Migration;
 
-use Eighty8\LaravelSeeder\Repository\SeederRepositoryInterface;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Migrations\Migrator;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Arr;
+use RenePardon\LaravelSeeder\Repository\SeederRepositoryInterface;
 
 class SeederMigrator extends Migrator implements SeederMigratorInterface
 {
@@ -133,7 +133,10 @@ class SeederMigrator extends Migrator implements SeederMigratorInterface
      */
     public function resolve($file): MigratableSeeder
     {
-        return parent::resolve($file);
+        /** @var MigratableSeeder $object */
+        $object = parent::resolve($file);
+
+        return $object;
     }
 
     /**
@@ -150,12 +153,16 @@ class SeederMigrator extends Migrator implements SeederMigratorInterface
         // Since the getRan method that retrieves the migration name just gives us the
         // migration name, we will format the names into objects with the name as a
         // property on the objects so that we can pass it to the rollback method.
-        $migrations = collect($migrations)->map(function ($m) {
-            return (object) ['seed' => $m];
-        })->all();
+        $migrations = collect($migrations)->map(
+            function ($m) {
+                return (object)['seed' => $m];
+            }
+        )->all();
 
         return $this->rollbackMigrations(
-            $migrations, $paths, compact('pretend')
+            $migrations,
+            $paths,
+            compact('pretend')
         );
     }
 
@@ -178,13 +185,14 @@ class SeederMigrator extends Migrator implements SeederMigratorInterface
         // which will reverse each migration in order. This getLast method on the
         // repository already returns these migration's names in reverse order.
         foreach ($migrations as $migration) {
-            $migration = (object) $migration;
+            $migration = (object)$migration;
 
             $rolledBack[] = $files[$migration->seed];
 
             $this->runDown(
                 $files[$migration->seed],
-                $migration, Arr::get($options, 'pretend', false)
+                $migration,
+                Arr::get($options, 'pretend', false)
             );
         }
 
