@@ -1,13 +1,13 @@
 <?php
 
-namespace Eighty8\LaravelSeeder\Migration;
+namespace RenePardon\LaravelSeeder\Migration;
 
 use Illuminate\Database\Migrations\MigrationCreator;
 use InvalidArgumentException;
 
 class SeederMigrationCreator extends MigrationCreator
 {
-    const STUB_PATH = __DIR__.'/../../../stubs';
+    const STUB_PATH = __DIR__ . '/../../../stubs';
     const STUB_FILE = 'MigratableSeeder.stub';
 
     /**
@@ -18,9 +18,9 @@ class SeederMigrationCreator extends MigrationCreator
      * @param string $table
      * @param bool   $create
      *
+     * @return string
      * @throws \Exception
      *
-     * @return string
      */
     public function create($name, $path, $table = null, $create = false)
     {
@@ -50,9 +50,9 @@ class SeederMigrationCreator extends MigrationCreator
      *
      * @param string $name
      *
+     * @return void
      * @throws \InvalidArgumentException
      *
-     * @return void
      */
     protected function ensureMigrationDoesntAlreadyExist($name, $migrationPath = null): void
     {
@@ -62,19 +62,15 @@ class SeederMigrationCreator extends MigrationCreator
     }
 
     /**
-     * Populate the place-holders in the migration stub.
+     * Ensures the given path exists.
      *
-     * @param string $name
-     * @param string $stub
-     * @param string $table
-     *
-     * @return string
+     * @param $path
      */
-    protected function populateStub($name, $stub, $table): string
+    protected function ensurePathExists($path): void
     {
-        $stub = str_replace('{{class}}', $this->getClassName($name), $stub);
-
-        return $stub;
+        if (! $this->files->exists($path)) {
+            $this->files->makeDirectory($path, 0755, true);
+        }
     }
 
     /**
@@ -87,7 +83,7 @@ class SeederMigrationCreator extends MigrationCreator
      */
     protected function getStub($table, $create): string
     {
-        return $this->files->get($this->stubPath().DIRECTORY_SEPARATOR.self::STUB_FILE);
+        return $this->files->get($this->stubPath() . DIRECTORY_SEPARATOR . self::STUB_FILE);
     }
 
     /**
@@ -110,18 +106,22 @@ class SeederMigrationCreator extends MigrationCreator
      */
     protected function getPath($name, $path): string
     {
-        return $path.DIRECTORY_SEPARATOR.$this->getDatePrefix().'_'.$this->getClassName($name).'.php';
+        return $path . DIRECTORY_SEPARATOR . $this->getDatePrefix() . '_' . $this->getClassName($name) . '.php';
     }
 
     /**
-     * Ensures the given path exists.
+     * Populate the place-holders in the migration stub.
      *
-     * @param $path
+     * @param string $name
+     * @param string $stub
+     * @param string $table
+     *
+     * @return string
      */
-    protected function ensurePathExists($path): void
+    protected function populateStub($name, $stub, $table): string
     {
-        if (!$this->files->exists($path)) {
-            $this->files->makeDirectory($path, 0755, true);
-        }
+        $stub = str_replace('{{class}}', $this->getClassName($name), $stub);
+
+        return $stub;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Eighty8\LaravelSeeder\Command;
+namespace RenePardon\LaravelSeeder\Command;
 
 use Illuminate\Console\ConfirmableTrait;
 use Symfony\Component\Console\Input\InputOption;
@@ -28,7 +28,7 @@ class SeedReset extends AbstractSeedMigratorCommand
      */
     public function handle(): void
     {
-        if (!$this->confirmToProceed()) {
+        if (! $this->confirmToProceed()) {
             return;
         }
 
@@ -36,10 +36,10 @@ class SeedReset extends AbstractSeedMigratorCommand
         $this->prepareMigrator();
 
         // Reset the migrator.
-        $this->info('Removing seeded data for '.ucfirst($this->getEnvironment()).' environment...');
+        $this->info('Removing seeded data for ' . ucfirst($this->getEnvironment()) . ' environment...');
         $this->migrator->reset($this->getMigrationPaths(), $this->getMigrationOptions());
 
-        $this->info('Removed seeded data for '.ucfirst($this->getEnvironment()).' environment');
+        $this->info('Removed seeded data for ' . ucfirst($this->getEnvironment()) . ' environment');
     }
 
     /**

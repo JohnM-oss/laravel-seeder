@@ -1,6 +1,6 @@
 # LaravelSeeder
 
-[![Build Status](https://travis-ci.org/eighty8/laravel-seeder.svg?branch=master)](https://travis-ci.org/eighty8/laravel-seeder)
+[![Build Status](https://travis-ci.org/renepardon/laravel-seeder.svg?branch=master)](https://travis-ci.org/renepardon/laravel-seeder)
 
 Seeding as it is currently done in Laravel is intended only for dev builds, but what if you're iteratively creating your 
 database and want to constantly flush it and repopulate it during development? 
@@ -14,15 +14,15 @@ All of the functionality you have grown accustomed to with Laravel migrations ha
 Requirements
 ============
 
-- Laravel >= 5.4
-- PHP >= 7.1
+- Laravel >= 7
+- PHP >= 7.4
 
 Installation
 ============
 
-- Run ```composer require eighty8/laravel-seeder```
-- Add ```Eighty8\LaravelSeeder\SeederServiceProvider::class``` to your providers array in ```app/config/app.php```
-- Run ```php artisan vendor:publish``` to push config files to your config folder if you want to override the name of the seeds folder or the name of the table where seeds are stored
+- Run ```composer require renepardon/laravel-seeder```
+- Run ```php artisan vendor:publish``` to push config files to your config folder if you want to override the name of 
+the seeders folder or the name of the table where seeds are stored
 
 
 Features
@@ -32,6 +32,7 @@ Features
 - Allows you to "version" seeds the same way that Laravel currently handles migrations. Running ```php artisan seed``` will only run seeds that haven't already been run.
 - Allows you to run multiple seeds of the same model/table
 - Prompts you if your database is in production
+
 
 Usage
 ============
@@ -47,9 +48,10 @@ When you install LaravelSeeder, various artisan commands are made available to y
 <tr><td>seed:install</td><td>You don't have to use this... it will be run automatically when you call "seed"</td></tr>
 </table>
 
+
 Local Development
 ============
-A Dockerfile with PHP 7.2, XDebug and Composer installed is bundled with the project to facilitate local development.
+A Dockerfile with PHP 7.4, XDebug and Composer installed is bundled with the project to facilitate local development.
 
 To easily bring up the local development environment, use the Docker Compose configuration:
 

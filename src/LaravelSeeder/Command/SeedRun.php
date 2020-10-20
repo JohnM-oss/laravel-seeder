@@ -1,6 +1,6 @@
 <?php
 
-namespace Eighty8\LaravelSeeder\Command;
+namespace RenePardon\LaravelSeeder\Command;
 
 use Illuminate\Console\ConfirmableTrait;
 use Symfony\Component\Console\Input\InputOption;
@@ -28,7 +28,7 @@ class SeedRun extends AbstractSeedMigratorCommand
      */
     public function handle(): void
     {
-        if (!$this->confirmToProceed()) {
+        if (! $this->confirmToProceed()) {
             return;
         }
 
@@ -36,10 +36,10 @@ class SeedRun extends AbstractSeedMigratorCommand
         $this->prepareMigrator();
 
         // Execute the migrator.
-        $this->info('Seeding data for '.ucfirst($this->getEnvironment()).' environment...');
+        $this->info('Seeding data for ' . ucfirst($this->getEnvironment()) . ' environment...');
         $this->migrator->run($this->getMigrationPaths(), $this->getMigrationOptions());
 
-        $this->info('Seeded data for '.ucfirst($this->getEnvironment()).' environment');
+        $this->info('Seeded data for ' . ucfirst($this->getEnvironment()) . ' environment');
     }
 
     /**

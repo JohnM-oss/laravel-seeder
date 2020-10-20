@@ -1,8 +1,9 @@
 <?php
 
-namespace Eighty8\LaravelSeeder\Repository;
+namespace RenePardon\LaravelSeeder\Repository;
 
 use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Schema\Blueprint;
@@ -75,21 +76,11 @@ class SeederRepository implements SeederRepositoryInterface
     /**
      * Resolve the database connection instance.
      *
-     * @return Connection
+     * @return ConnectionInterface
      */
-    public function getConnection(): Connection
+    public function getConnection(): ConnectionInterface
     {
         return $this->connectionResolver->connection($this->connection);
-    }
-
-    /**
-     * Determines whether an environment has been set.
-     *
-     * @return bool
-     */
-    public function hasEnvironment(): bool
-    {
-        return !empty($this->getEnvironment());
     }
 
     /**
@@ -110,6 +101,16 @@ class SeederRepository implements SeederRepositoryInterface
     public function setEnvironment(string $env): void
     {
         $this->environment = $env;
+    }
+
+    /**
+     * Determines whether an environment has been set.
+     *
+     * @return bool
+     */
+    public function hasEnvironment(): bool
+    {
+        return ! empty($this->getEnvironment());
     }
 
     /**
@@ -151,11 +152,13 @@ class SeederRepository implements SeederRepositoryInterface
      */
     public function log($file, $batch): void
     {
-        $this->table()->insert([
-            'seed'  => $file,
-            'env'   => $this->getEnvironment(),
-            'batch' => $batch,
-        ]);
+        $this->table()->insert(
+            [
+                'seed'  => $file,
+                'env'   => $this->getEnvironment(),
+                'batch' => $batch,
+            ]
+        );
     }
 
     /**
@@ -190,14 +193,17 @@ class SeederRepository implements SeederRepositoryInterface
     {
         $schema = $this->getConnection()->getSchemaBuilder();
 
-        $schema->create($this->table, function (Blueprint $table) {
-            // The migrations table is responsible for keeping track of which of the
-            // migrations have actually run for the application. We'll create the
-            // table to hold the migration file's path as well as the batch ID.
-            $table->string('seed');
-            $table->string('env');
-            $table->integer('batch');
-        });
+        $schema->create(
+            $this->table,
+            function (Blueprint $table) {
+                // The migrations table is responsible for keeping track of which of the
+                // migrations have actually run for the application. We'll create the
+                // table to hold the migration file's path as well as the batch ID.
+                $table->string('seed');
+                $table->string('env');
+                $table->integer('batch');
+            }
+        );
     }
 
     /**
@@ -233,7 +239,7 @@ class SeederRepository implements SeederRepositoryInterface
     {
         return $this->table()->get()->toArray();
     }
-    
+
     /**
      * Get the completed migrations with their batch numbers.
      *
@@ -242,8 +248,8 @@ class SeederRepository implements SeederRepositoryInterface
     public function getMigrationBatches()
     {
         return $this->table()
-                ->orderBy('batch', 'asc')
-                ->orderBy('migration', 'asc')
-                ->pluck('batch', 'migration')->all();
+            ->orderBy('batch', 'asc')
+            ->orderBy('migration', 'asc')
+            ->pluck('batch', 'migration')->all();
     }
 }

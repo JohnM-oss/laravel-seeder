@@ -1,6 +1,6 @@
 <?php
 
-namespace Eighty8\LaravelSeeder\Command;
+namespace RenePardon\LaravelSeeder\Command;
 
 use Illuminate\Support\Collection;
 use Symfony\Component\Console\Input\InputOption;
@@ -40,6 +40,20 @@ class SeedStatus extends AbstractSeedMigratorCommand
     }
 
     /**
+     * Prints the status of the seeders in the database.
+     */
+    protected function printStatus(): void
+    {
+        $ran = $this->migrator->getRepository()->getRan();
+
+        if (count($migrations = $this->getStatusFor($ran)) > 0) {
+            $this->table(['Ran?', 'Seeder'], $migrations);
+        } else {
+            $this->error('No seeders found');
+        }
+    }
+
+    /**
      * Get the status for the given ran migrations.
      *
      * @param array $ran
@@ -49,13 +63,15 @@ class SeedStatus extends AbstractSeedMigratorCommand
     protected function getStatusFor(array $ran)
     {
         return Collection::make($this->getAllMigrationFiles())
-            ->map(function ($migration) use ($ran) {
-                $migrationName = $this->migrator->getMigrationName($migration);
+            ->map(
+                function ($migration) use ($ran) {
+                    $migrationName = $this->migrator->getMigrationName($migration);
 
-                return in_array($migrationName, $ran)
-                    ? ['<info>Y</info>', $migrationName]
-                    : ['<fg=red>N</fg=red>', $migrationName];
-            });
+                    return in_array($migrationName, $ran)
+                        ? ['<info>Y</info>', $migrationName]
+                        : ['<fg=red>N</fg=red>', $migrationName];
+                }
+            );
     }
 
     /**
@@ -80,19 +96,5 @@ class SeedStatus extends AbstractSeedMigratorCommand
             ['database', null, InputOption::VALUE_OPTIONAL, 'The database connection to use.'],
             ['path', null, InputOption::VALUE_OPTIONAL, 'The path of seeder files to use.'],
         ];
-    }
-
-    /**
-     * Prints the status of the seeders in the database.
-     */
-    protected function printStatus(): void
-    {
-        $ran = $this->migrator->getRepository()->getRan();
-
-        if (count($migrations = $this->getStatusFor($ran)) > 0) {
-            $this->table(['Ran?', 'Seeder'], $migrations);
-        } else {
-            $this->error('No seeders found');
-        }
     }
 }

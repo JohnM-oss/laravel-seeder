@@ -1,6 +1,6 @@
 <?php
 
-namespace Eighty8\LaravelSeeder\Command;
+namespace RenePardon\LaravelSeeder\Command;
 
 use Illuminate\Console\ConfirmableTrait;
 use Symfony\Component\Console\Input\InputOption;
@@ -28,7 +28,7 @@ class SeedRollback extends AbstractSeedMigratorCommand
      */
     public function handle(): void
     {
-        if (!$this->confirmToProceed()) {
+        if (! $this->confirmToProceed()) {
             return;
         }
 
@@ -36,10 +36,10 @@ class SeedRollback extends AbstractSeedMigratorCommand
         $this->prepareMigrator();
 
         // Rolls back the migrator.
-        $this->info('Rolling back seeded data for '.ucfirst($this->getEnvironment()).' environment...');
+        $this->info('Rolling back seeded data for ' . ucfirst($this->getEnvironment()) . ' environment...');
         $this->migrator->rollback($this->getMigrationPaths(), $this->getMigrationOptions());
 
-        $this->info('Rolled back seeded data for '.ucfirst($this->getEnvironment()).' environment');
+        $this->info('Rolled back seeded data for ' . ucfirst($this->getEnvironment()) . ' environment');
     }
 
     /**
