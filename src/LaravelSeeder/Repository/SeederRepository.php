@@ -42,7 +42,7 @@ class SeederRepository implements SeederRepositoryInterface
      * Create a new database migration repository instance.
      *
      * @param ConnectionResolverInterface $resolver
-     * @param string                      $table
+     * @param string $table
      */
     public function __construct(ConnectionResolverInterface $resolver, string $table)
     {
@@ -110,7 +110,7 @@ class SeederRepository implements SeederRepositoryInterface
      */
     public function hasEnvironment(): bool
     {
-        return ! empty($this->getEnvironment());
+        return !empty($this->getEnvironment());
     }
 
     /**
@@ -146,7 +146,7 @@ class SeederRepository implements SeederRepositoryInterface
      * Log that a migration was run.
      *
      * @param string $file
-     * @param int    $batch
+     * @param int $batch
      *
      * @return void
      */
@@ -154,8 +154,8 @@ class SeederRepository implements SeederRepositoryInterface
     {
         $this->table()->insert(
             [
-                'seed'  => $file,
-                'env'   => $this->getEnvironment(),
+                'seed' => $file,
+                'env' => $this->getEnvironment(),
                 'batch' => $batch,
             ]
         );
@@ -204,6 +204,11 @@ class SeederRepository implements SeederRepositoryInterface
                 $table->integer('batch');
             }
         );
+    }
+
+    public function deleteRepository()
+    {
+        // TODO to be implemented
     }
 
     /**
