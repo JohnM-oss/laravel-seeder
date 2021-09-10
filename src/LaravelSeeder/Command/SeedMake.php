@@ -90,10 +90,15 @@ class SeedMake extends MigrateMakeCommand
     protected function getOutputPath(string $env)
     {
         $targetPath = $this->input->getOption('path');
-
-        $path = (empty($targetPath))
-            ? database_path(config('seeders.dir'))
-            : $this->laravel->basePath() . DIRECTORY_SEPARATOR . $targetPath;
+        $path = database_path() . DIRECTORY_SEPARATOR . 'seeders';
+        
+        if(!empty($targetPath)) {
+            $path = $this->laravel->basePath() . DIRECTORY_SEPARATOR . $targetPath;
+        } else {
+            $pathsFromConfig = config('seeders.dir');
+            if(count($pathsFromConfig))
+                $path = $pathsFromConfig[0];
+        }
 
         return $path . DIRECTORY_SEPARATOR . $env;
     }
