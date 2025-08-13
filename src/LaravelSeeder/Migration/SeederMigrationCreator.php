@@ -9,6 +9,7 @@ class SeederMigrationCreator extends MigrationCreator
 {
     const STUB_PATH = __DIR__ . '/../../../stubs';
     const STUB_FILE = 'MigratableSeeder.stub';
+	protected string $name;
 
     /**
      * Create a new seeder at the given path.
@@ -24,6 +25,8 @@ class SeederMigrationCreator extends MigrationCreator
      */
     public function create($name, $path, $table = null, $create = false)
     {
+		$this->name = $name;
+
         $this->ensureMigrationDoesntAlreadyExist($name, $path);
         $this->ensurePathExists($path);
 
@@ -34,13 +37,13 @@ class SeederMigrationCreator extends MigrationCreator
 
         $this->files->put(
             $path = $this->getPath($name, $path),
-            $this->populateStub($name, $stub, $table)
+            $this->populateStub($stub, $table)
         );
 
         // Next, we will fire any hooks that are supposed to fire after a migration is
         // created. Once that is done we'll be ready to return the full path to the
         // migration file so it can be used however it's needed by the developer.
-        $this->firePostCreateHooks($table);
+        $this->firePostCreateHooks($table, $path);
 
         return $path;
     }
@@ -118,9 +121,9 @@ class SeederMigrationCreator extends MigrationCreator
      *
      * @return string
      */
-    protected function populateStub($name, $stub, $table): string
+    protected function populateStub($stub, $table): string
     {
-        $stub = str_replace('{{class}}', $this->getClassName($name), $stub);
+        $stub = str_replace('{{class}}', $this->getClassName($this->name), $stub);
 
         return $stub;
     }
