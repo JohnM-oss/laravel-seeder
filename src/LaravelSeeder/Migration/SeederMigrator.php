@@ -2,6 +2,7 @@
 
 namespace RenePardon\LaravelSeeder\Migration;
 
+use Illuminate\Console\View\Components\Info;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Migrations\Migrator;
 use Illuminate\Filesystem\Filesystem;
@@ -106,7 +107,8 @@ class SeederMigrator extends Migrator implements SeederMigratorInterface
             $name = $this->getMigrationName($file)
         );
 
-        $this->note("<comment>Seeding:</comment> {$name}");
+        //$this->note("<comment>Seeding:</comment> {$name}");
+	    $this->write(Info::class, "<comment>Seeding:</comment> {$name}");
 
         if ($pretend) {
             $this->pretendToRun($seeder, 'run');
@@ -121,7 +123,8 @@ class SeederMigrator extends Migrator implements SeederMigratorInterface
         // in the application. A seeder repository keeps the migrate order.
         $this->repository->log($name, $batch);
 
-        $this->note("<info>Seeded:</info> $name");
+        //$this->note("<info>Seeded:</info> $name");
+	    $this->write(Info::class, "<info>Seeded:</info> $name");
     }
 
     /**
