@@ -161,17 +161,27 @@ abstract class AbstractSeedMigratorCommand extends Command
      */
     protected function resolveMigrationPaths(): void
     {
-        $pathsFromConfig = config('seeders.dir');
+	    $pathsFromConfig = config('seeders.dir');
 
-        foreach ($pathsFromConfig as $pathFromConfig) {
-            // Add the 'all' environment path to migration paths
-            $allEnvPath = $pathFromConfig . DIRECTORY_SEPARATOR . self::ALL_ENVIRONMENTS;
-            $this->addMigrationPath($allEnvPath);
+		if(is_string($pathsFromConfig)) {
+			// Add the 'all' environment path to migration paths
+			$allEnvPath = $pathsFromConfig . DIRECTORY_SEPARATOR . self::ALL_ENVIRONMENTS;
+			$this->addMigrationPath($allEnvPath);
 
-            // Add the targeted environment path to migration paths
-            $pathWithEnv = $pathFromConfig . DIRECTORY_SEPARATOR . $this->getEnvironment();
-            $this->addMigrationPath($pathWithEnv);
-        }
+			// Add the targeted environment path to migration paths
+			$pathWithEnv = $pathsFromConfig . DIRECTORY_SEPARATOR . $this->getEnvironment();
+			$this->addMigrationPath($pathWithEnv);
+		} else {
+			foreach ($pathsFromConfig as $pathFromConfig) {
+				// Add the 'all' environment path to migration paths
+				$allEnvPath = $pathFromConfig . DIRECTORY_SEPARATOR . self::ALL_ENVIRONMENTS;
+				$this->addMigrationPath($allEnvPath);
+
+				// Add the targeted environment path to migration paths
+				$pathWithEnv = $pathFromConfig . DIRECTORY_SEPARATOR . $this->getEnvironment();
+				$this->addMigrationPath($pathWithEnv);
+			}
+		}
     }
 
     /**
