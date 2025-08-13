@@ -257,4 +257,9 @@ class SeederRepository implements SeederRepositoryInterface
             ->orderBy('migration', 'asc')
             ->pluck('batch', 'migration')->all();
     }
+
+	public function getMigrationsByBatch($batch) : array
+	{
+		return $this->table()->where('batch', $batch)->get()->toArray();
+	}
 }
