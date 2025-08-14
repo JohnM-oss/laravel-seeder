@@ -165,20 +165,20 @@ abstract class AbstractSeedMigratorCommand extends Command
 
 		if(is_string($pathsFromConfig)) {
 			// Add the 'all' environment path to migration paths
-			$allEnvPath = $pathsFromConfig . DIRECTORY_SEPARATOR . self::ALL_ENVIRONMENTS;
+			$allEnvPath = database_path($pathsFromConfig) . DIRECTORY_SEPARATOR . self::ALL_ENVIRONMENTS;
 			$this->addMigrationPath($allEnvPath);
 
 			// Add the targeted environment path to migration paths
-			$pathWithEnv = $pathsFromConfig . DIRECTORY_SEPARATOR . $this->getEnvironment();
+			$pathWithEnv = database_path($pathsFromConfig) . DIRECTORY_SEPARATOR . $this->getEnvironment();
 			$this->addMigrationPath($pathWithEnv);
 		} else {
 			foreach ($pathsFromConfig as $pathFromConfig) {
 				// Add the 'all' environment path to migration paths
-				$allEnvPath = $pathFromConfig . DIRECTORY_SEPARATOR . self::ALL_ENVIRONMENTS;
+				$allEnvPath = database_path($pathFromConfig) . DIRECTORY_SEPARATOR . self::ALL_ENVIRONMENTS;
 				$this->addMigrationPath($allEnvPath);
 
 				// Add the targeted environment path to migration paths
-				$pathWithEnv = $pathFromConfig . DIRECTORY_SEPARATOR . $this->getEnvironment();
+				$pathWithEnv = database_path($pathFromConfig) . DIRECTORY_SEPARATOR . $this->getEnvironment();
 				$this->addMigrationPath($pathWithEnv);
 			}
 		}
