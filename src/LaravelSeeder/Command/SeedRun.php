@@ -38,15 +38,6 @@ class SeedRun extends AbstractSeedMigratorCommand
         // Execute the migrator.
         $this->info('Seeding data for ' . ucfirst($this->getEnvironment()) . ' environment...');
 
-        $this->info("Migration paths:");
-		foreach ($this->getMigrationPaths() as $migrationPath) {
-			$this->info("migration path: $migrationPath");
-		}
-	    $this->info("Migration options:");
-		foreach ($this->getMigrationOptions() as $migrationOption) {
-			$this->info("migration option: $migrationOption");
-		}
-
 		$this->migrator->run($this->getMigrationPaths(), $this->getMigrationOptions());
 
         $this->info('Seeded data for ' . ucfirst($this->getEnvironment()) . ' environment');
